@@ -47,8 +47,71 @@ public class ATM {
 		customerNumber = number;
 		state = PIN;
 	}
-	/** FINDS CUSTOMER IN BANK
-	 * If found, set state to ACCOUNT, ELSE TO START
+	/** Find Customers in bank
 	 * 
 	 */
+	
+	public void selectCustomer(int pin){
+		assert state == PIN;
+		currentCustomer = theBank.findCustomer(customerNumer,pin);
+		if(currentCustomer == null)
+			state = START;
+			
+			else 
+				state = ACCOUNT;
+		
+	}
+	/**Sets current account to checking or savings.
+	 * 
+	 */
+	public void selectAccount(int account) {
+		assert state == ACCOUNT || state == TRANSACT;
+		
+		if(account == CHECKING)
+			currentAccount = currentCustomer.getCheckingAccount();
+		else
+			currentAccount = currentCustomer.getSavingsAccount();
+		state = TRANSACT;
+	}
+	/**withdraws amount from current account
+	 * 
+	 */
+	public void withdraw(double value){
+		
+		assert state == TRANSACT;
+		currentAccount.withdraw(value);
+	}
+	/** deposita amount to current account
+	 * 
+	 */
+	public void deposit(double value){
+		
+		assert state == TRANSACT;
+		currentAccount.deposit(value);
+	}
+	/**gets balance of current account
+	 * 
+	 */
+	public double getBalance(){
+		assert state == TRANSACT;
+		return currentAccount.getBalance();
+	}
+	/**Moves back to previous state
+	 * 
+	 */
+	public void back(){
+		
+		if(state == TRANSACT)
+			state = ACCOUNT;
+		else if (state == ACCOUNT)
+			state = PIN;
+		else if (state == PIN)
+			state = START;
+	}
+	/** gets the current state of the ATM
+	 * 
+	 */
+	public int getState(){
+		return state;
+	}
 }
